@@ -1,1 +1,0 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"ecr","Source":"./modules/ecr","Dir":"modules/ecr"},{"Key":"s3_backend","Source":"./modules/s3-backend","Dir":"modules/s3-backend"},{"Key":"vpc","Source":"./modules/vpc","Dir":"modules/vpc"}]}
