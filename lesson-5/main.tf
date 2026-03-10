@@ -22,7 +22,7 @@ variable "aws_region" {
 variable "student_name" {
   description = "Your name (used for S3 bucket naming)"
   type        = string
-  default     = "dariia-kulikova-terraform-state"
+  default     = "your-name-terraform-state"
 }
 
 # S3 Backend Module
