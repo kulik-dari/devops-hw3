@@ -1,0 +1,11 @@
+application:
+  name: django-app
+  namespace: default
+  repoURL: https://github.com/kulik-dari/devops-hw3
+  targetRevision: lesson-8-9
+  path: lesson-8-9/charts/django-app
+  ecrRepoURL: ""
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

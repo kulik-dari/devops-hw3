@@ -1,0 +1,99 @@
+pipeline {
+  agent {
+    kubernetes {
+      label 'kaniko'
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+    - /busybox/cat
+    tty: true
+    volumeMounts:
+    - name: workspace-volume
+      mountPath: /workspace
+  - name: git
+    image: alpine/git:latest
+    command:
+    - cat
+    tty: true
+    env:
+    - name: GITHUB_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: github-token
+          key: token
+          optional: true
+  volumes:
+  - name: workspace-volume
+    emptyDir: {}
+"""
+    }
+  }
+
+  environment {
+    AWS_REGION      = 'us-west-2'
+    ECR_REPO        = '746764748053.dkr.ecr.us-west-2.amazonaws.com/lesson-8-django'
+    GITHUB_REPO     = 'https://github.com/kulik-dari/devops-hw3.git'
+    GITHUB_BRANCH   = 'lesson-8-9'
+    HELM_CHART_PATH = 'lesson-8-9/charts/django-app/values.yaml'
+    IMAGE_TAG       = "${env.BUILD_NUMBER}"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build & Push to ECR') {
+      steps {
+        container('kaniko') {
+          sh """
+            /kaniko/executor \\
+              --context=dir://\${WORKSPACE} \\
+              --dockerfile=Dockerfile \\
+              --destination=\${ECR_REPO}:\${IMAGE_TAG} \\
+              --destination=\${ECR_REPO}:latest \\
+              --cache=true
+          """
+        }
+      }
+    }
+
+    stage('Update Helm values.yaml') {
+      steps {
+        container('git') {
+          sh """
+            git config --global user.email "ci@jenkins.local"
+            git config --global user.name "Jenkins CI"
+
+            git clone \${GITHUB_REPO} repo
+            cd repo
+
+            # Update image tag in values.yaml
+            sed -i 's|tag:.*|tag: "\${IMAGE_TAG}"|g' \${HELM_CHART_PATH}
+
+            git add \${HELM_CHART_PATH}
+            git commit -m "ci: update django image tag to \${IMAGE_TAG} [skip ci]"
+            git push origin \${GITHUB_BRANCH}
+          """
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "Pipeline completed! Image: \${ECR_REPO}:\${IMAGE_TAG}"
+      echo "ArgoCD will auto-sync the new image to the cluster"
+    }
+    failure {
+      echo "Pipeline failed!"
+    }
+  }
+}
