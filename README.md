@@ -1,4 +1,4 @@
-# DevOps Homework — Дарія Куликова
+# DevOps Homework
 
 Репозиторій з домашніми завданнями курсу GoIT Neoversity DevOps.
 
