@@ -1,8 +1,5 @@
 # Lesson DB Module — Універсальний Terraform-модуль для RDS / Aurora
 
-**Автор:** Дарія Куликова  
-**Репозиторій:** https://github.com/kulik-dari/devops-hw3  
-**Гілка:** `lesson-db-module`
 
 ---
 
