@@ -286,4 +286,4 @@ print('S3 видалено!')
 | Aurora `db.t3.medium` | ~$0.082/год (~$59/міс) |
 | Storage 20GB gp2 | ~$0.023/GB/міс |
 
-> ⚠️ Завжди запускайте `terraform destroy` після перевірки!
+
