@@ -1,0 +1,34 @@
+image:
+  repository: 746764748053.dkr.ecr.us-west-2.amazonaws.com/final-django
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+replicaCount: 2
+
+autoscaler:
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+config:
+  DJANGO_SETTINGS_MODULE: "myproject.settings"
+  DEBUG: "False"
+  ALLOWED_HOSTS: "*"
+  POSTGRES_HOST: "final-postgres.c7ugwg6iezn5.us-west-2.rds.amazonaws.com"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "djangodb"
+  POSTGRES_USER: "djangoadmin"
+  POSTGRES_PASSWORD: "DevOpsSecret123!"

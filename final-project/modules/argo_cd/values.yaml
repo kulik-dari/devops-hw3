@@ -1,0 +1,15 @@
+server:
+  service:
+    type: LoadBalancer
+  extraArgs:
+    - --insecure
+
+configs:
+  params:
+    server.insecure: true
+
+  repositories:
+    devops-hw3:
+      url: ${github_repo_url}
+      name: devops-hw3
+      type: git
