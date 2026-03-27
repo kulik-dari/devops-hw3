@@ -1,8 +1,6 @@
 # Final Project — DevOps Infrastructure on AWS
 
-**Автор:** Дарія Куликова  
-**Репозиторій:** https://github.com/kulik-dari/devops-hw3  
-**Гілка:** `final-project`
+
 
 ---
 
